@@ -8,7 +8,13 @@ In the second scene the short hallway to the bedroom closes one second after the
 
 ![The door closes and both robots replan](demos/door.gif)
 
-The full write-up with results is in `index.html`.
+## Web viewer
+
+`web/` is a static page where you can replay any run: pick the route and the RRT* seed, close the short hallway after one second, show the RRT* search tree, or draw all 30 routes on top of each other. It also has the results table and the write-up. Open `web/index.html` directly, or run `make serve` and go to http://127.0.0.1:8000.
+
+The page does not plan anything itself. `make web` runs PyRoboSim for every route and seed and saves the paths, trees and times to `web/data.js`, and the page replays them.
+
+To put it online, deploy the `web` folder as a static site, for example on Vercel with `web` as the root directory, or on GitHub Pages.
 
 ## Results
 
@@ -27,7 +33,7 @@ Each scenario was planned with seeds 0 to 29. Planning time includes building th
 
 ![Path length and planning time](demos/bench.png)
 
-A* gives the same path every time and was shorter on average in every scenario. RRT* took the short hallway from the kitchen to the bedroom in only 6 of 30 runs. The RRT* in PyRoboSim stops as soon as its two trees meet, so it does not use extra time to improve the path.
+A* gives the same path every time and was shorter on average in every scenario. RRT* took the short hallway from the kitchen to the bedroom in only 8 of 30 runs. The RRT* in PyRoboSim stops as soon as its two trees meet, so it does not use extra time to improve the path.
 
 Times depend on the machine. Raw numbers are in `demos/bench.csv`.
 
@@ -43,6 +49,8 @@ make gif     # render the race to demos/race.gif
 make door    # render the closing door scene to demos/door.gif
 make video   # both scenes as mp4
 make bench   # 30 seeds per scenario, writes demos/bench.csv and demos/bench.png
+make web     # plan every route and seed, write web/data.js for the viewer
+make serve   # serve the viewer at http://127.0.0.1:8000
 make test    # run the tests
 make ui      # open the PyRoboSim web UI at http://127.0.0.1:8050
 ```
@@ -51,7 +59,7 @@ RRT* is random. The scripts take `--seed N`, so the same seed gives the same pat
 
 ## Code
 
-`navbench/world.py` loads the world, sets up both planners, and plans with a fixed seed. `navbench/bench.py` runs the scenarios. `navbench/motion.py` moves a robot along a path at constant speed for the animations. The scripts in the top folder draw the pictures.
+`navbench/world.py` loads the world, sets up both planners, and plans with a fixed seed. `navbench/bench.py` runs the scenarios. `navbench/motion.py` moves a robot along a path at constant speed for the animations. `navbench/scenes.py` closes the hallway mid-run and replans. `navbench/export.py` collects everything for the web viewer, and `web/app.js` draws it. The scripts in the top folder draw the pictures.
 
 ## Credits
 
