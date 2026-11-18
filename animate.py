@@ -31,7 +31,8 @@ for name, planner in make_planners().items():
     tracks[name] = Track.from_path(path, SPEED)
     print(f"{name}: length={path.length:.2f} m, plan={dt:.3f} s, travel={tracks[name].duration:.1f} s")
 
-fig, ax = plt.subplots(figsize=(6, 6.4))
+fig, ax = plt.subplots(figsize=(6.4, 5.4))
+fig.subplots_adjust(left=0.01, right=0.99, bottom=0.01, top=0.93)
 draw_world(ax, world)
 
 ax.plot(START.x, START.y, "go", ms=10, zorder=3)
