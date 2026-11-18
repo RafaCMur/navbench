@@ -1,0 +1,241 @@
+scenario,planner,seed,success,length,time
+kitchen to bedroom,A*,0,True,5.328,0.0796
+kitchen to bedroom,RRT*,0,True,8.202,0.0514
+kitchen to bedroom,A*,1,True,5.328,0.0749
+kitchen to bedroom,RRT*,1,True,5.930,0.0359
+kitchen to bedroom,A*,2,True,5.328,0.0743
+kitchen to bedroom,RRT*,2,True,8.123,0.0726
+kitchen to bedroom,A*,3,True,5.328,0.0733
+kitchen to bedroom,RRT*,3,True,8.065,0.0437
+kitchen to bedroom,A*,4,True,5.328,0.0721
+kitchen to bedroom,RRT*,4,True,7.952,0.0797
+kitchen to bedroom,A*,5,True,5.328,0.0734
+kitchen to bedroom,RRT*,5,True,8.388,0.0345
+kitchen to bedroom,A*,6,True,5.328,0.0734
+kitchen to bedroom,RRT*,6,True,7.553,0.0341
+kitchen to bedroom,A*,7,True,5.328,0.0749
+kitchen to bedroom,RRT*,7,True,8.038,0.1295
+kitchen to bedroom,A*,8,True,5.328,0.0723
+kitchen to bedroom,RRT*,8,True,5.375,0.0817
+kitchen to bedroom,A*,9,True,5.328,0.0749
+kitchen to bedroom,RRT*,9,True,7.547,0.0550
+kitchen to bedroom,A*,10,True,5.328,0.0764
+kitchen to bedroom,RRT*,10,True,8.010,0.0186
+kitchen to bedroom,A*,11,True,5.328,0.0742
+kitchen to bedroom,RRT*,11,True,5.808,0.0264
+kitchen to bedroom,A*,12,True,5.328,0.0730
+kitchen to bedroom,RRT*,12,True,5.710,0.0623
+kitchen to bedroom,A*,13,True,5.328,0.0747
+kitchen to bedroom,RRT*,13,True,5.365,0.0320
+kitchen to bedroom,A*,14,True,5.328,0.0735
+kitchen to bedroom,RRT*,14,True,5.615,0.0532
+kitchen to bedroom,A*,15,True,5.328,0.0748
+kitchen to bedroom,RRT*,15,True,6.114,0.0693
+kitchen to bedroom,A*,16,True,5.328,0.0728
+kitchen to bedroom,RRT*,16,True,8.100,0.0465
+kitchen to bedroom,A*,17,True,5.328,0.0750
+kitchen to bedroom,RRT*,17,True,7.722,0.0285
+kitchen to bedroom,A*,18,True,5.328,0.0794
+kitchen to bedroom,RRT*,18,True,8.318,0.0475
+kitchen to bedroom,A*,19,True,5.328,0.0774
+kitchen to bedroom,RRT*,19,True,6.405,0.0620
+kitchen to bedroom,A*,20,True,5.328,0.0876
+kitchen to bedroom,RRT*,20,True,7.993,0.0337
+kitchen to bedroom,A*,21,True,5.328,0.0834
+kitchen to bedroom,RRT*,21,True,8.325,0.0378
+kitchen to bedroom,A*,22,True,5.328,0.0753
+kitchen to bedroom,RRT*,22,True,8.133,0.0415
+kitchen to bedroom,A*,23,True,5.328,0.0755
+kitchen to bedroom,RRT*,23,True,8.288,0.0238
+kitchen to bedroom,A*,24,True,5.328,0.0749
+kitchen to bedroom,RRT*,24,True,7.489,0.0294
+kitchen to bedroom,A*,25,True,5.328,0.0755
+kitchen to bedroom,RRT*,25,True,7.647,0.0587
+kitchen to bedroom,A*,26,True,5.328,0.0748
+kitchen to bedroom,RRT*,26,True,8.315,0.0296
+kitchen to bedroom,A*,27,True,5.328,0.0742
+kitchen to bedroom,RRT*,27,True,7.897,0.0597
+kitchen to bedroom,A*,28,True,5.328,0.0743
+kitchen to bedroom,RRT*,28,True,8.908,0.0640
+kitchen to bedroom,A*,29,True,5.328,0.0742
+kitchen to bedroom,RRT*,29,True,8.024,0.0421
+kitchen to bathroom,A*,0,True,2.612,0.0637
+kitchen to bathroom,RRT*,0,True,3.385,0.0052
+kitchen to bathroom,A*,1,True,2.612,0.0696
+kitchen to bathroom,RRT*,1,True,3.796,0.0197
+kitchen to bathroom,A*,2,True,2.612,0.0628
+kitchen to bathroom,RRT*,2,True,2.992,0.0125
+kitchen to bathroom,A*,3,True,2.612,0.0747
+kitchen to bathroom,RRT*,3,True,2.844,0.0089
+kitchen to bathroom,A*,4,True,2.612,0.0628
+kitchen to bathroom,RRT*,4,True,2.970,0.0061
+kitchen to bathroom,A*,5,True,2.612,0.0620
+kitchen to bathroom,RRT*,5,True,3.176,0.0125
+kitchen to bathroom,A*,6,True,2.612,0.0630
+kitchen to bathroom,RRT*,6,True,2.870,0.0064
+kitchen to bathroom,A*,7,True,2.612,0.0622
+kitchen to bathroom,RRT*,7,True,3.981,0.0140
+kitchen to bathroom,A*,8,True,2.612,0.0634
+kitchen to bathroom,RRT*,8,True,2.926,0.0039
+kitchen to bathroom,A*,9,True,2.612,0.0629
+kitchen to bathroom,RRT*,9,True,2.869,0.0056
+kitchen to bathroom,A*,10,True,2.612,0.0630
+kitchen to bathroom,RRT*,10,True,2.682,0.0054
+kitchen to bathroom,A*,11,True,2.612,0.0629
+kitchen to bathroom,RRT*,11,True,2.992,0.0090
+kitchen to bathroom,A*,12,True,2.612,0.0627
+kitchen to bathroom,RRT*,12,True,3.505,0.0130
+kitchen to bathroom,A*,13,True,2.612,0.0627
+kitchen to bathroom,RRT*,13,True,2.908,0.0077
+kitchen to bathroom,A*,14,True,2.612,0.0625
+kitchen to bathroom,RRT*,14,True,3.119,0.0050
+kitchen to bathroom,A*,15,True,2.612,0.0630
+kitchen to bathroom,RRT*,15,True,2.985,0.0033
+kitchen to bathroom,A*,16,True,2.612,0.0624
+kitchen to bathroom,RRT*,16,True,2.918,0.0068
+kitchen to bathroom,A*,17,True,2.612,0.0622
+kitchen to bathroom,RRT*,17,True,2.945,0.0040
+kitchen to bathroom,A*,18,True,2.612,0.0636
+kitchen to bathroom,RRT*,18,True,3.485,0.0101
+kitchen to bathroom,A*,19,True,2.612,0.0633
+kitchen to bathroom,RRT*,19,True,2.982,0.0081
+kitchen to bathroom,A*,20,True,2.612,0.0619
+kitchen to bathroom,RRT*,20,True,2.922,0.0038
+kitchen to bathroom,A*,21,True,2.612,0.0624
+kitchen to bathroom,RRT*,21,True,3.092,0.0056
+kitchen to bathroom,A*,22,True,2.612,0.0656
+kitchen to bathroom,RRT*,22,True,3.279,0.0064
+kitchen to bathroom,A*,23,True,2.612,0.0659
+kitchen to bathroom,RRT*,23,True,3.143,0.0090
+kitchen to bathroom,A*,24,True,2.612,0.0670
+kitchen to bathroom,RRT*,24,True,2.778,0.0076
+kitchen to bathroom,A*,25,True,2.612,0.0658
+kitchen to bathroom,RRT*,25,True,2.727,0.0051
+kitchen to bathroom,A*,26,True,2.612,0.0679
+kitchen to bathroom,RRT*,26,True,2.981,0.0051
+kitchen to bathroom,A*,27,True,2.612,0.0656
+kitchen to bathroom,RRT*,27,True,2.854,0.0056
+kitchen to bathroom,A*,28,True,2.612,0.0635
+kitchen to bathroom,RRT*,28,True,2.744,0.0137
+kitchen to bathroom,A*,29,True,2.612,0.0635
+kitchen to bathroom,RRT*,29,True,2.963,0.0036
+bathroom to bedroom,A*,0,True,4.724,0.0701
+bathroom to bedroom,RRT*,0,True,5.161,0.0472
+bathroom to bedroom,A*,1,True,4.724,0.0701
+bathroom to bedroom,RRT*,1,True,7.772,0.0508
+bathroom to bedroom,A*,2,True,4.724,0.0717
+bathroom to bedroom,RRT*,2,True,5.101,0.0733
+bathroom to bedroom,A*,3,True,4.724,0.0694
+bathroom to bedroom,RRT*,3,True,5.144,0.0371
+bathroom to bedroom,A*,4,True,4.724,0.0696
+bathroom to bedroom,RRT*,4,True,5.678,0.0565
+bathroom to bedroom,A*,5,True,4.724,0.0691
+bathroom to bedroom,RRT*,5,True,4.768,0.0132
+bathroom to bedroom,A*,6,True,4.724,0.0688
+bathroom to bedroom,RRT*,6,True,4.815,0.0317
+bathroom to bedroom,A*,7,True,4.724,0.0694
+bathroom to bedroom,RRT*,7,True,5.186,0.0498
+bathroom to bedroom,A*,8,True,4.724,0.0706
+bathroom to bedroom,RRT*,8,True,5.625,0.1129
+bathroom to bedroom,A*,9,True,4.724,0.0699
+bathroom to bedroom,RRT*,9,True,5.113,0.0146
+bathroom to bedroom,A*,10,True,4.724,0.0697
+bathroom to bedroom,RRT*,10,True,5.430,0.0119
+bathroom to bedroom,A*,11,True,4.724,0.0700
+bathroom to bedroom,RRT*,11,True,5.060,0.0453
+bathroom to bedroom,A*,12,True,4.724,0.0692
+bathroom to bedroom,RRT*,12,True,5.122,0.0345
+bathroom to bedroom,A*,13,True,4.724,0.0692
+bathroom to bedroom,RRT*,13,True,5.000,0.0576
+bathroom to bedroom,A*,14,True,4.724,0.0688
+bathroom to bedroom,RRT*,14,True,5.287,0.1666
+bathroom to bedroom,A*,15,True,4.724,0.0690
+bathroom to bedroom,RRT*,15,True,8.179,0.0617
+bathroom to bedroom,A*,16,True,4.724,0.0713
+bathroom to bedroom,RRT*,16,True,4.955,0.0488
+bathroom to bedroom,A*,17,True,4.724,0.0722
+bathroom to bedroom,RRT*,17,True,5.258,0.0220
+bathroom to bedroom,A*,18,True,4.724,0.0713
+bathroom to bedroom,RRT*,18,True,5.189,0.0496
+bathroom to bedroom,A*,19,True,4.724,0.0730
+bathroom to bedroom,RRT*,19,True,4.681,0.0231
+bathroom to bedroom,A*,20,True,4.724,0.0731
+bathroom to bedroom,RRT*,20,True,5.328,0.0305
+bathroom to bedroom,A*,21,True,4.724,0.0733
+bathroom to bedroom,RRT*,21,True,4.972,0.0381
+bathroom to bedroom,A*,22,True,4.724,0.0724
+bathroom to bedroom,RRT*,22,True,5.016,0.0235
+bathroom to bedroom,A*,23,True,4.724,0.0715
+bathroom to bedroom,RRT*,23,True,4.982,0.0212
+bathroom to bedroom,A*,24,True,4.724,0.0707
+bathroom to bedroom,RRT*,24,True,4.810,0.0239
+bathroom to bedroom,A*,25,True,4.724,0.0735
+bathroom to bedroom,RRT*,25,True,5.389,0.0620
+bathroom to bedroom,A*,26,True,4.724,0.0707
+bathroom to bedroom,RRT*,26,True,5.603,0.0157
+bathroom to bedroom,A*,27,True,4.724,0.0710
+bathroom to bedroom,RRT*,27,True,5.235,0.0495
+bathroom to bedroom,A*,28,True,4.724,0.0707
+bathroom to bedroom,RRT*,28,True,4.689,0.0598
+bathroom to bedroom,A*,29,True,4.724,0.0709
+bathroom to bedroom,RRT*,29,True,4.677,0.0420
+"kitchen to bedroom, door closed",A*,0,True,7.090,0.0777
+"kitchen to bedroom, door closed",RRT*,0,True,8.202,0.0467
+"kitchen to bedroom, door closed",A*,1,True,7.090,0.0781
+"kitchen to bedroom, door closed",RRT*,1,True,8.796,0.0632
+"kitchen to bedroom, door closed",A*,2,True,7.090,0.0793
+"kitchen to bedroom, door closed",RRT*,2,True,8.123,0.0666
+"kitchen to bedroom, door closed",A*,3,True,7.090,0.0786
+"kitchen to bedroom, door closed",RRT*,3,True,8.145,0.0478
+"kitchen to bedroom, door closed",A*,4,True,7.090,0.0792
+"kitchen to bedroom, door closed",RRT*,4,True,7.952,0.0691
+"kitchen to bedroom, door closed",A*,5,True,7.090,0.0793
+"kitchen to bedroom, door closed",RRT*,5,True,8.388,0.0304
+"kitchen to bedroom, door closed",A*,6,True,7.090,0.0779
+"kitchen to bedroom, door closed",RRT*,6,True,7.553,0.0328
+"kitchen to bedroom, door closed",A*,7,True,7.090,0.0780
+"kitchen to bedroom, door closed",RRT*,7,True,7.536,0.0807
+"kitchen to bedroom, door closed",A*,8,True,7.090,0.0832
+"kitchen to bedroom, door closed",RRT*,8,True,8.368,0.1445
+"kitchen to bedroom, door closed",A*,9,True,7.090,0.0843
+"kitchen to bedroom, door closed",RRT*,9,True,7.547,0.1045
+"kitchen to bedroom, door closed",A*,10,True,7.090,0.0836
+"kitchen to bedroom, door closed",RRT*,10,True,8.010,0.0166
+"kitchen to bedroom, door closed",A*,11,True,7.090,0.0798
+"kitchen to bedroom, door closed",RRT*,11,True,8.455,0.0328
+"kitchen to bedroom, door closed",A*,12,True,7.090,0.0803
+"kitchen to bedroom, door closed",RRT*,12,True,7.944,0.0952
+"kitchen to bedroom, door closed",A*,13,True,7.090,0.0800
+"kitchen to bedroom, door closed",RRT*,13,True,8.980,0.0833
+"kitchen to bedroom, door closed",A*,14,True,7.090,0.0802
+"kitchen to bedroom, door closed",RRT*,14,True,8.361,0.1431
+"kitchen to bedroom, door closed",A*,15,True,7.090,0.0786
+"kitchen to bedroom, door closed",RRT*,15,True,7.736,0.1912
+"kitchen to bedroom, door closed",A*,16,True,7.090,0.0784
+"kitchen to bedroom, door closed",RRT*,16,True,8.100,0.0435
+"kitchen to bedroom, door closed",A*,17,True,7.090,0.0788
+"kitchen to bedroom, door closed",RRT*,17,True,7.722,0.0245
+"kitchen to bedroom, door closed",A*,18,True,7.090,0.0783
+"kitchen to bedroom, door closed",RRT*,18,True,8.274,0.0355
+"kitchen to bedroom, door closed",A*,19,True,7.090,0.0786
+"kitchen to bedroom, door closed",RRT*,19,True,8.424,0.0546
+"kitchen to bedroom, door closed",A*,20,True,7.090,0.0787
+"kitchen to bedroom, door closed",RRT*,20,True,7.993,0.0283
+"kitchen to bedroom, door closed",A*,21,True,7.090,0.0788
+"kitchen to bedroom, door closed",RRT*,21,True,8.298,0.0627
+"kitchen to bedroom, door closed",A*,22,True,7.090,0.0791
+"kitchen to bedroom, door closed",RRT*,22,True,8.133,0.0360
+"kitchen to bedroom, door closed",A*,23,True,7.090,0.0777
+"kitchen to bedroom, door closed",RRT*,23,True,7.881,0.0296
+"kitchen to bedroom, door closed",A*,24,True,7.090,0.0792
+"kitchen to bedroom, door closed",RRT*,24,True,7.489,0.0191
+"kitchen to bedroom, door closed",A*,25,True,7.090,0.0780
+"kitchen to bedroom, door closed",RRT*,25,True,7.256,0.0323
+"kitchen to bedroom, door closed",A*,26,True,7.090,0.0774
+"kitchen to bedroom, door closed",RRT*,26,True,8.315,0.0253
+"kitchen to bedroom, door closed",A*,27,True,7.090,0.0885
+"kitchen to bedroom, door closed",RRT*,27,True,7.897,0.0491
+"kitchen to bedroom, door closed",A*,28,True,7.090,0.0793
+"kitchen to bedroom, door closed",RRT*,28,True,8.908,0.0544
+"kitchen to bedroom, door closed",A*,29,True,7.090,0.0788
+"kitchen to bedroom, door closed",RRT*,29,True,8.024,0.0387
