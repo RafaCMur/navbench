@@ -18,7 +18,7 @@
 <header>
   <p class="back"><a href="index.html">Back to start</a></p>
   <h1>Two robots, one house</h1>
-  <p>Each robot has the same job: put the soda from the desk into the trash can. Each one works in its own copy of the house, so they never get in each other's way.</p>
+  <p>Each robot has the same task: put the soda from the desk into the trash can. Each works in its own copy of the house, so the two never interfere.</p>
 </header>
 
 <main>
@@ -74,13 +74,13 @@
 
   <section class="text">
     <h2>What PyRoboSim does here</h2>
-    <p>Everything here was run in PyRoboSim, using its own actions for picking up, putting down, opening and closing. There is no physics in them. The soda just moves along with the robot, and when it is put down PyRoboSim picks a free spot inside the trash can. A closed trash can hides what is inside.</p>
-    <p>PyRoboSim does not let a robot open something while it is holding an object. So both robots first drive to the trash can and open it, then fetch the soda. I set each action to take one second. A* drives the same three routes for every seed. RRT* plans its three drives again for each seed.</p>
+    <p>Everything here was run in PyRoboSim, using its own actions for picking up, putting down, opening and closing. These actions involve no physics. The soda simply moves with the robot, and when it is put down PyRoboSim chooses a free spot inside the trash can. A closed trash can hides its contents.</p>
+    <p>PyRoboSim does not allow a robot to open something while it is holding an object. Both robots therefore drive to the trash can and open it first, and only then fetch the soda. I set each action to take one second. A* drives the same three routes for every seed, while RRT* plans its three drives again for each seed.</p>
   </section>
 </main>
 
 <footer>
-  <p>The world, the robot, the objects and both planners come from <a href="https://github.com/sea-bass/pyrobosim">PyRoboSim</a> by Sebastian Castro (MIT license). PyRoboSim planned the runs in Python, and this page only replays them.</p>
+  <p>The world, the robot, the objects and both planners come from <a href="https://github.com/sea-bass/pyrobosim">PyRoboSim</a> by Sebastian Castro (MIT license). The runs were planned by PyRoboSim in Python, and this page only replays them.</p>
 </footer>
 
 <script src="data.js"></script>

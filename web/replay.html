@@ -18,7 +18,7 @@
 <header>
   <p class="back"><a href="index.html">Back to start</a></p>
   <h1>Two robots, one house</h1>
-  <p>Both robots drive their route at the same speed. Press play.</p>
+  <p>Both robots drive their planned route at the same speed. Press play.</p>
 </header>
 
 <main>
@@ -75,17 +75,17 @@
   <section class="how">
     <div>
       <h2><span class="swatch astar"></span>A*</h2>
-      <p>Lays a grid of 5 cm squares over the house and crosses out the squares the robot does not fit in. Then it searches outward from the start, always trying the most promising square first. It finds the shortest route on that grid, and the same route every time.</p>
+      <p>Overlays a grid of 5 cm cells on the house and marks the cells the robot does not fit in. It then searches outward from the start, always expanding the most promising cell first. It returns the shortest route on that grid, and the same route every time.</p>
     </div>
     <div>
       <h2><span class="swatch rrt"></span>RRT*</h2>
-      <p>Picks random points in the free space and grows two trees of branches toward them, one from the start and one from the goal. When it finds a shorter link between branches, it swaps it in. It stops when the two trees meet, so the route depends on where the random points land.</p>
+      <p>Samples random points in the free space and grows two trees toward them, one from the start and one from the goal. When it finds a shorter connection between branches, it rewires the tree to use it. It stops when the two trees meet, so the route depends on where the random points fall.</p>
     </div>
   </section>
 
   <section class="text">
     <h2>Results over <span class="n-seeds">30</span> seeds</h2>
-    <p>Each planner planned every route once per seed. A seed is a number that fixes the random choices, so the same seed always gives the same RRT* route. Click a row to watch it above. Each dot is one RRT* run. The yellow line is A*, which is the same in every run.</p>
+    <p>Each planner planned every route once per seed. A seed fixes the random choices, so the same seed always gives the same RRT* route. Click a row to replay it above. Each dot is one RRT* run. The yellow line is A*, which is identical in every run.</p>
     <table class="results">
       <thead>
         <tr><th>Route</th><th>A* (m)</th><th>RRT* mean (m)</th><th>RRT* best / worst (m)</th><th>All runs</th><th>Median time, A* / RRT* (ms)</th></tr>
@@ -95,17 +95,17 @@
     <p id="door-summary"></p>
 
     <h2>What I found</h2>
-    <p>On average A* found the shorter path on every route, and the same path every time. RRT* varied. From the kitchen to the bedroom it used the short hallway in only <b id="f-short"></b> of <span class="n-seeds">30</span> runs. In the others it went around through the bathroom. The hallway is narrow and has a bend, so random points rarely land inside it before the trees meet another way.</p>
-    <p>A* is not always the shortest, though. From the bathroom to the bedroom the best RRT* run (<b id="f-rrt-best"></b> m) beat A* (<b id="f-astar-bb"></b> m). A* can only move between neighbouring squares, while RRT* can link two points at any angle.</p>
-    <p>RRT* was usually faster to plan here, but that is mostly because of the grid. A* spends most of its time building the grid, not searching it. In a small house that is cheap. In a big map, or one that changes often, the grid has to be rebuilt every time and the cost adds up.</p>
+    <p>On average, A* found the shorter path on every route, and the same path every time. RRT* varied from run to run. From the kitchen to the bedroom it used the short hallway in only <b id="f-short"></b> of <span class="n-seeds">30</span> runs and went around through the bathroom in the others. The hallway is narrow and has a bend, so random points rarely land inside it before the two trees connect elsewhere.</p>
+    <p>A* is not always shorter. From the bathroom to the bedroom the best RRT* run (<b id="f-rrt-best"></b> m) beat A* (<b id="f-astar-bb"></b> m). A* moves between neighbouring cells, while RRT* can connect two points at any angle.</p>
+    <p>RRT* was usually faster to plan here, but mostly because of the grid. A* spends most of its time building the grid rather than searching it. In a small house this is cheap. In a large map, or one that changes often, the grid has to be rebuilt each time and the cost grows.</p>
 
     <h2>Limits</h2>
-    <p>This is one small flat house and a round robot that drives at a constant speed. The robots do not sense anything. When the hallway closes, they are told and plan again from where they are. PyRoboSim's RRT* stops as soon as its two trees meet. It does not keep improving the route if given more time, as RRT* can. The times were measured on one laptop and change from machine to machine. The path lengths do not.</p>
+    <p>This is a single small 2D house with a round robot that drives at constant speed. The robots have no sensors. When the hallway closes, they are told and plan again from their current position. PyRoboSim's RRT* stops as soon as its two trees meet, so it does not keep improving the route given more time, as RRT* can in principle. The times were measured on one laptop and vary between machines. The path lengths do not.</p>
   </section>
 </main>
 
 <footer>
-  <p>The world, the robot and both planners come from <a href="https://github.com/sea-bass/pyrobosim">PyRoboSim</a> by Sebastian Castro (MIT license). PyRoboSim planned the paths in Python, and this page only replays them.</p>
+  <p>The world, the robot and both planners come from <a href="https://github.com/sea-bass/pyrobosim">PyRoboSim</a> by Sebastian Castro (MIT license). The paths were planned by PyRoboSim in Python, and this page only replays them.</p>
 </footer>
 
 <script src="data.js"></script>

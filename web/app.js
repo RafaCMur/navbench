@@ -88,9 +88,9 @@ function updatePanel() {
 
     let status = `planned in ${Math.round(r.plan * 1000)} ms`;
     if (doorMode() && t >= D.close_at) {
-      status = r.replan === null ? "not blocked, kept its route" : `replanned in ${Math.round(r.replan * 1000)} ms`;
+      status = r.replan === null ? "route not blocked, kept" : `replanned in ${Math.round(r.replan * 1000)} ms`;
     }
-    if (!r.ok && !doorMode()) status = "found no path";
+    if (!r.ok && !doorMode()) status = "no path found";
     else if (t >= tr.duration) status += r.ok ? `, arrived at ${tr.duration.toFixed(1)} s` : ", stuck";
     c.status.textContent = status;
   }
@@ -101,7 +101,7 @@ function updatePanel() {
   if (done && a.ok && b.ok) {
     const gap = b.track.duration - a.track.duration;
     if (Math.abs(gap) < 0.05) msg = "A tie.";
-    else msg = `${gap > 0 ? "A*" : "RRT*"} got there ${Math.abs(gap).toFixed(1)} s earlier.`;
+    else msg = `${gap > 0 ? "A*" : "RRT*"} arrived ${Math.abs(gap).toFixed(1)} s earlier.`;
   }
   resultEl.textContent = msg;
   scrub.value = Math.round((1000 * state.t) / endTime());

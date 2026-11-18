@@ -167,7 +167,7 @@ function updatePanel() {
     let status = "waiting";
     if (r.plan) status = `planned in ${describe(name, r.plan)}`;
     if (r.replan) status = `replanned in ${describe(name, r.replan)}`;
-    if (!r.ok) status += ", found no path";
+    if (!r.ok) status += ", no path found";
     else if (r.plan && t >= tr.duration) status += `, arrived after ${tr.duration.toFixed(1)} s`;
     c.status.textContent = status;
   }
@@ -177,7 +177,7 @@ function updatePanel() {
   if (live.place && arrived() && a.ok && b.ok) {
     const gap = b.track.duration - a.track.duration;
     if (Math.abs(gap) < 0.05) msg = "A tie.";
-    else msg = `${gap > 0 ? "A*" : "RRT*"} got there ${Math.abs(gap).toFixed(1)} s earlier.`;
+    else msg = `${gap > 0 ? "A*" : "RRT*"} arrived ${Math.abs(gap).toFixed(1)} s earlier.`;
   }
   if (!live.place) msg = "Pick a place to drive to.";
   resultEl.textContent = msg;
