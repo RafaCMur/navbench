@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two robots, one house: A* vs RRT*</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Two robots, one house</h1>
+  <p class="sub">A* and RRT* plan a route through the same rooms. Press play and watch who gets there first.</p>
+</header>
+
+<main>
+  <section class="viewer">
+    <div class="stage">
+      <canvas id="map"></canvas>
+    </div>
+
+    <aside class="panel">
+      <div class="robots" id="robots"></div>
+
+      <div class="controls">
+        <div class="buttons">
+          <button id="play" class="primary">Play</button>
+          <button id="restart">Restart</button>
+        </div>
+
+        <label class="field">
+          <span>Route</span>
+          <select id="scenario"></select>
+        </label>
+
+        <label class="field">
+          <span>RRT* seed <b id="seed-value">0</b></span>
+          <div class="seed-row">
+            <input id="seed" type="range" min="0" max="29" value="0">
+            <button id="dice" title="Random seed">Random</button>
+          </div>
+        </label>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
