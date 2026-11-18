@@ -9,102 +9,44 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="start">
 
 <header>
   <h1>Two robots, one house</h1>
-  <p>A* and RRT* plan a route through the same floor plan and drive it at the same speed. Press play.</p>
+  <p>A* and RRT* plan a route through the same floor plan. Choose how you want to look at it.</p>
 </header>
 
 <main>
-  <section class="sheet">
-    <canvas id="map"></canvas>
+  <div class="modes">
+    <a class="mode" href="replay.html">
+      <svg viewBox="0 0 240 150" aria-hidden="true">
+        <rect x="10" y="10" width="130" height="90" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="140" y="10" width="90" height="130" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="10" y="100" width="130" height="40" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M40 40 L140 60 L170 70 L190 110" fill="none" stroke="#ffd447" stroke-width="3"/>
+        <path d="M40 40 L70 100 L120 120 L170 118 L190 110" fill="none" stroke="#ff8a7a" stroke-width="3" stroke-dasharray="6 5"/>
+        <circle cx="40" cy="40" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="190" cy="110" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <h2>Replay</h2>
+      <p>Watch both robots drive routes planned by PyRoboSim. Change the seed, close the short hallway, and see the results over 30 runs.</p>
+    </a>
 
-    <aside class="side">
-      <div class="legend" id="robots"></div>
-      <p class="result" id="result"></p>
-
-      <div class="controls">
-        <div class="buttons">
-          <button id="play" class="primary">Play</button>
-          <button id="restart">Restart</button>
-          <span class="speeds">
-            <button data-speed="1" class="on">1×</button>
-            <button data-speed="2">2×</button>
-            <button data-speed="4">4×</button>
-          </span>
-        </div>
-
-        <input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Time">
-
-        <label class="field">
-          Route
-          <select id="scenario"></select>
-        </label>
-
-        <label class="field">
-          <span>RRT* seed <b id="seed-value">0</b></span>
-          <span class="seed-row">
-            <input id="seed" type="range" min="0" max="29" value="0">
-            <button id="dice" type="button" title="Random seed">Random</button>
-          </span>
-        </label>
-
-        <label class="check"><input id="door" type="checkbox"><span>Close the short hallway after 1 s</span></label>
-        <label class="check"><input id="tree" type="checkbox"><span>Show the RRT* search tree</span></label>
-        <label class="check"><input id="all" type="checkbox"><span>Show all <span id="n-seeds">30</span> routes</span></label>
-
-        <p class="keys">Space plays or pauses. The arrow keys change the seed.</p>
-      </div>
-
-      <table class="titleblock">
-        <tr><td>Project</td><td>navbench</td></tr>
-        <tr><td>Route</td><td id="tb-route"></td></tr>
-        <tr><td>Seed</td><td id="tb-seed"></td></tr>
-        <tr><td>Planned</td><td id="made"></td></tr>
-        <tr><td>Drawn by</td><td>RafaCMur</td></tr>
-      </table>
-    </aside>
-  </section>
-
-  <section class="how">
-    <div>
-      <h2><span class="swatch astar"></span>A*</h2>
-      <p>Cuts the house into a grid of 5 cm cells, marks the cells a robot cannot stand in, then searches outward from the start, always trying the most promising cell first. It finds the shortest route on that grid, and the same route every time.</p>
+    <div class="mode soon">
+      <svg viewBox="0 0 240 150" aria-hidden="true">
+        <rect x="10" y="10" width="130" height="90" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="140" y="10" width="90" height="130" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="10" y="100" width="130" height="40" fill="none" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="60" cy="55" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M60 40 V70 M45 55 H75" stroke="currentColor" stroke-width="1.5"/>
+        <circle cx="185" cy="105" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M185 90 V120 M170 105 H200" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <h2>Live</h2>
+      <p>Click a start and a goal anywhere in the house and watch both planners find a route. Coming soon.</p>
     </div>
-    <div>
-      <h2><span class="swatch rrt"></span>RRT*</h2>
-      <p>Throws random points into free space and grows two trees toward them, one from the start and one from the goal. When a shorter link appears it rewires nearby branches. It stops as soon as the trees meet, so the route depends on where the random points fell.</p>
-    </div>
-  </section>
-
-  <section class="text">
-    <h2>Results over <span class="n-seeds">30</span> seeds</h2>
-    <p>Every route was planned once per seed with each planner. Click a row to watch it above. Each dot is one RRT* run. The yellow line is A*, which is the same in every run.</p>
-    <table class="results">
-      <thead>
-        <tr><th>Route</th><th>A* (m)</th><th>RRT* mean (m)</th><th>RRT* best / worst (m)</th><th>All runs</th><th>Median time, A* / RRT* (ms)</th></tr>
-      </thead>
-      <tbody id="results"></tbody>
-    </table>
-    <p id="door-summary"></p>
-
-    <h2>What I found</h2>
-    <p>A* found the shorter path on average on every route, and it found the same path every time. RRT* was less predictable. From the kitchen to the bedroom it took the short hallway in only <b id="f-short"></b> of <span class="n-seeds">30</span> runs and drove around through the bathroom in the rest. That hallway is narrow and has a bend, so random points rarely land inside it before the trees meet another way.</p>
-    <p>A* is not always shortest. From the bathroom to the bedroom the best RRT* run (<b id="f-rrt-best"></b> m) beat A* (<b id="f-astar-bb"></b> m), because A* can only step between neighbouring grid cells while RRT* can connect points at any angle.</p>
-    <p>RRT* was usually faster here, but that is mostly the grid. Most of A*'s time goes into building the grid, not into the search. In a small house that is cheap. In a large map, or one that changes often, the grid has to be rebuilt every time and that cost grows.</p>
-
-    <h2>Limits</h2>
-    <p>This is one small 2D world with a round robot that drives along the path at constant speed. The robots do not sense anything. When the hallway closes they are told about it and plan again from scratch. The RRT* in PyRoboSim stops as soon as its trees connect, so it does not keep improving its path with extra time the way RRT* can. Times were measured on one laptop and change from machine to machine. Path lengths do not.</p>
-  </section>
+  </div>
 </main>
 
-<footer>
-  <p>The world, the robot and both planners come from <a href="https://github.com/sea-bass/pyrobosim">PyRoboSim</a> by Sebastian Castro (MIT license). The paths were planned by PyRoboSim in Python and this page only replays them.</p>
-</footer>
-
-<script src="data.js"></script>
-<script src="app.js"></script>
-<script src="results.js"></script>
 </body>
 </html>

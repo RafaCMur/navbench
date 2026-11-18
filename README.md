@@ -10,7 +10,7 @@ In the second scene the short hallway to the bedroom closes one second after the
 
 ## Web viewer
 
-`web/` is a static page where you can replay any run: pick the route and the RRT* seed, close the short hallway after one second, show the RRT* search tree, or draw all 30 routes on top of each other. It also has the results table and the write-up. Open `web/index.html` directly, or run `make serve` and go to http://127.0.0.1:8000.
+`web/` is a static site. `index.html` is the start screen and `replay.html` is the viewer, where you can replay any run: pick the route and the RRT* seed, close the short hallway after one second, show the RRT* search tree, or draw all 30 routes on top of each other. It also has the results table and the write-up. Open `web/index.html` directly, or run `make serve` and go to http://127.0.0.1:8000.
 
 The page does not plan anything itself. `make web` runs PyRoboSim for every route and seed and saves the paths, trees and times to `web/data.js`, and the page replays them.
 
