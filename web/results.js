@@ -72,7 +72,7 @@ const doorText = NAMES.map((name) => {
   return `${t} and drove ${driven.toFixed(2)} m on average`;
 });
 document.getElementById("door-summary").textContent =
-  `With the short hallway closing after ${D.close_at} s: ${doorText.join("; ")}.`;
+  `If the short hallway closes after ${D.close_at} s: ${doorText.join("; ")}.`;
 
 const kb = all[0];
 document.getElementById("f-short").textContent = D.scenarios[0].runs["RRT*"].filter((r) => r.via_door).length;

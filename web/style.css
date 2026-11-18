@@ -24,7 +24,7 @@ header { padding-top: 48px; padding-bottom: 20px; }
 
 h1, h2 { font-family: "Barlow Condensed", Barlow, sans-serif; font-weight: 600; line-height: 1.1; }
 h1 { font-size: 3.4rem; margin: 0; letter-spacing: -0.01em; }
-header p { margin: 8px 0 0; color: var(--muted); font-size: 1.15rem; max-width: 60ch; }
+header p { margin: 8px 0 0; color: var(--muted); font-size: 1.15rem; max-width: 100ch; }
 h2 { font-size: 1.7rem; margin: 2.6rem 0 0.5rem; }
 
 a { color: var(--ink); }
