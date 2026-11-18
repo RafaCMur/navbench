@@ -33,10 +33,25 @@ def plan(robot, planner, seed=0, start=START, goal=GOAL):
     """Plan a path with the given planner. Returns (path, seconds)."""
     # RRT samples with the global numpy generator (World.sample_free_robot_pose_uniform)
     np.random.seed(seed)
-    robot.set_path_planner(planner)
     t0 = time.perf_counter()
+    # set_path_planner calls reset(), which is where A* builds its occupancy
+    # grid, so the grid build counts as planning time
+    robot.set_path_planner(planner)
     path = robot.plan_path(start, goal)
     return path, time.perf_counter() - t0
+
+
+def door(world):
+    """Return the hallway that joins the kitchen and the bedroom directly."""
+    for hall in world.hallways:
+        if {hall.room_start.name, hall.room_end.name} == {"kitchen", "bedroom"}:
+            return hall
+
+
+def close_door(world):
+    """Close the kitchen-bedroom hallway, so the only way left is the bathroom."""
+    res = world.close_location(door(world), ignore_robots=world.robots)
+    assert res.is_success(), res.message
 
 
 def draw_world(ax, world):
