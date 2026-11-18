@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>navbench: A* vs RRT* on PyRoboSim</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 980px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { margin-bottom: 0.2rem; }
+  .sub { color: #666; margin-top: 0; }
+  .row { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .row figure { flex: 1 1 420px; margin: 0; }
+  img { max-width: 100%; border: 1px solid #ddd; }
+  figcaption { font-size: 0.9rem; color: #555; }
+  table { border-collapse: collapse; font-size: 0.9rem; width: 100%; }
+  th, td { border-bottom: 1px solid #ddd; padding: 0.3rem 0.5rem; text-align: right; }
+  th:first-child, td:first-child, th:nth-child(2), td:nth-child(2) { text-align: left; }
+  code { background: #f3f3f3; padding: 0 0.2rem; }
+  footer { margin-top: 2rem; font-size: 0.85rem; color: #666; }
+</style>
+</head>
+<body>
+
+<h1>Two robots, one house</h1>
+<p class="sub">A* and RRT* plan a route through the same rooms. Which one gets there first, and what happens when a door shuts?</p>
+
+<p>Both robots start in the kitchen and drive to the bedroom at the same speed, 1 m/s. The blue one plans with A*, which searches a grid of 5 cm cells for the shortest route. The red one plans with RRT*, which grows a random tree through free space until the tree reaches the goal. The faint red lines are that tree.</p>
+
+<div class="row">
+  <figure>
+    <img src="demos/race.gif" alt="A* and RRT* robots driving from the kitchen to the bedroom">
+    <figcaption>The race, seed 0. A* takes the short hallway (5.3 m). RRT* goes round through the bathroom (8.2 m).</figcaption>
+  </figure>
+  <figure>
+    <img src="demos/door.gif" alt="The short hallway closes after one second and both robots plan a new route">
+    <figcaption>One second in, the short hallway closes. Each robot plans again from where it is, in under 0.15 s, and goes round. Seed 8, picked because in that run both robots first take the short hallway.</figcaption>
+  </figure>
+</div>
+
+<h2>Results over 30 seeds</h2>
+<p>Each scenario was planned 30 times with each planner, using seeds 0 to 29. A* gives the same path every time, so only its time changes. Planning time includes building the occupancy grid for A*.</p>
+
+<table>
+<tr><th>scenario</th><th>planner</th><th>success</th><th>length (m)</th><th>best / worst (m)</th><th>median time (ms)</th></tr>
+<tr><td>kitchen to bedroom</td><td>A*</td><td>100%</td><td>5.33</td><td>5.33 / 5.33</td><td>75</td></tr>
+<tr><td></td><td>RRT*</td><td>100%</td><td>7.45 ± 1.05</td><td>5.36 / 8.91</td><td>45</td></tr>
+<tr><td>kitchen to bathroom</td><td>A*</td><td>100%</td><td>2.61</td><td>2.61 / 2.61</td><td>63</td></tr>
+<tr><td></td><td>RRT*</td><td>100%</td><td>3.06 ± 0.30</td><td>2.68 / 3.98</td><td>6</td></tr>
+<tr><td>bathroom to bedroom</td><td>A*</td><td>100%</td><td>4.72</td><td>4.72 / 4.72</td><td>71</td></tr>
+<tr><td></td><td>RRT*</td><td>100%</td><td>5.31 ± 0.76</td><td>4.68 / 8.18</td><td>44</td></tr>
+<tr><td>kitchen to bedroom, door closed</td><td>A*</td><td>100%</td><td>7.09</td><td>7.09 / 7.09</td><td>79</td></tr>
+<tr><td></td><td>RRT*</td><td>100%</td><td>8.09 ± 0.41</td><td>7.26 / 8.98</td><td>47</td></tr>
+</table>
+
+<p><img src="demos/bench.png" alt="Box plots of path length and planning time per scenario"></p>
+
+<h2>What I found</h2>
+<p>A* found the shorter path on average in every scenario, and it found the same path every time. RRT* was less predictable: from the kitchen to the bedroom it took the short hallway in only 6 of 30 runs and drove around through the bathroom in the rest. That hallway is narrow and has a bend, so random samples rarely land inside it before the tree reaches the goal another way.</p>
+<p>A* is not always shortest. Between the bathroom and the bedroom, the best RRT* run (4.68 m) beat A* (4.72 m), because A* can only move between neighbouring grid cells while RRT* can connect points at any angle.</p>
+<p>RRT* was usually faster here, but this is mostly the grid. Building the grid takes about 70 ms, and the A* search on it takes about 12 ms. In a small house that is cheap. In a large map, or one that changes often, the grid cost grows.</p>
+
+<h2>Limits</h2>
+<p>This is one small 2D world with a round robot that drives along the path at constant speed. The robots do not sense anything. When the door closes, they are told about it and plan again from scratch. The RRT* in PyRoboSim stops as soon as the two trees connect, so it does not keep improving its path with extra time the way RRT* can. With more time it would likely close some of the gap to A*.</p>
+
+<footer>
+<p>Code: <code>make bench</code>, <code>make gif</code>, <code>make door</code>. The world, robot, and both planners are from <a href="https://github.com/sea-bass/pyrobosim">PyRoboSim</a> by Sebastian Castro (MIT license).</p>
+</footer>
+
+</body>
+</html>
