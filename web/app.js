@@ -88,7 +88,7 @@ function updatePanel() {
 
     let status = `planned in ${Math.round(r.plan * 1000)} ms`;
     if (doorMode() && t >= D.close_at) {
-      status = r.replan === null ? "route not blocked, kept" : `replanned in ${Math.round(r.replan * 1000)} ms`;
+      status = r.replan === null ? "route not blocked" : `replanned in ${Math.round(r.replan * 1000)} ms`;
     }
     if (!r.ok && !doorMode()) status = "no path found";
     else if (t >= tr.duration) status += r.ok ? `, arrived at ${tr.duration.toFixed(1)} s` : ", stuck";
