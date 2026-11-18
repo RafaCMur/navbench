@@ -20,13 +20,23 @@
     </div>
 
     <aside class="panel">
-      <div class="robots" id="robots"></div>
+      <div>
+        <div class="robots" id="robots"></div>
+        <p class="result" id="result"></p>
+      </div>
 
       <div class="controls">
         <div class="buttons">
           <button id="play" class="primary">Play</button>
           <button id="restart">Restart</button>
+          <span class="speeds">
+            <button data-speed="1" class="on">1×</button>
+            <button data-speed="2">2×</button>
+            <button data-speed="4">4×</button>
+          </span>
         </div>
+
+        <input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Time">
 
         <label class="field">
           <span>Route</span>
@@ -40,6 +50,12 @@
             <button id="dice" title="Random seed">Random</button>
           </div>
         </label>
+
+        <label class="check"><input id="door" type="checkbox"><span>Close the short hallway after 1 s</span></label>
+        <label class="check"><input id="tree" type="checkbox"><span>Show the RRT* search tree</span></label>
+        <label class="check"><input id="all" type="checkbox"><span>Show all <span id="n-seeds">30</span> routes</span></label>
+
+        <p class="keys">Space: play or pause. Left and right arrows: change seed.</p>
       </div>
     </aside>
   </section>

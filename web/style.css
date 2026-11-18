@@ -57,6 +57,15 @@ canvas { display: block; width: 100%; height: 100%; }
 .seed-row { display: flex; gap: 8px; align-items: center; }
 .seed-row input { flex: 1; }
 
+.speeds { margin-left: auto; display: flex; gap: 4px; }
+.speeds button { padding: 7px 9px; font-size: 0.85rem; }
+.check { display: flex; gap: 8px; align-items: center; font-size: 0.9rem; cursor: pointer; }
+.check.off { opacity: 0.4; cursor: default; }
+.check input { accent-color: var(--rrt); width: 16px; height: 16px; }
+#scrub { width: 100%; }
+.result { min-height: 1.4em; margin: 4px 0 0; font-weight: 600; color: var(--ok); }
+.keys { margin: 0; font-size: 0.78rem; color: var(--dim); }
+
 button, select {
   font: inherit;
   color: var(--text);
