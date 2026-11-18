@@ -8,18 +8,14 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import numpy as np
 from matplotlib.animation import FFMpegWriter, FuncAnimation, PillowWriter
-from pyrobosim.utils.pose import Pose
-from shapely.geometry import LineString
 
-from navbench.motion import Track
-from navbench.world import GOAL, START, close_door, door, draw_world, load_world, make_planners, plan
+from navbench.scenes import CLOSE_AT, door_run
+from navbench.world import GOAL, START, draw_world, load_world
 
 SPEED = 1.0
 FPS = 20
 HOLD_S = 1.5
-CLOSE_AT = 1.0  # seconds after start, robots are still in the kitchen
 COLORS = {"A*": "tab:blue", "RRT*": "tab:red"}
 
 parser = argparse.ArgumentParser()
@@ -28,30 +24,15 @@ parser.add_argument("--seed", type=int, default=8)
 parser.add_argument("--mp4", action="store_true", help="write demos/door.mp4 instead (needs ffmpeg)")
 args = parser.parse_args()
 
-world = load_world()
-robot = world.robots[0]
-hall = door(world)
-
-before = {}
-for name, planner in make_planners().items():
-    path, _ = plan(robot, planner, args.seed)
-    before[name] = Track.from_path(path, SPEED)
-
-close_door(world)
-
-runs = {}
-for name, planner in make_planners().items():
-    old = before[name]
-    if not LineString(old.ahead(CLOSE_AT)).intersects(hall.closed_polygon):
-        runs[name] = (old, None)
+runs, hall = door_run(args.seed, CLOSE_AT, SPEED)
+before = {name: old for name, (old, _, _) in runs.items()}
+for name, (old, tr, dt) in runs.items():
+    if dt is None:
         print(f"{name}: not blocked, length={old.length:.2f} m")
-        continue
-    x, y = old.position(CLOSE_AT)
-    path, dt = plan(robot, planner, args.seed, start=Pose(x=x, y=y))
-    assert path is not None and path.poses, f"{name}: no path after the door closed"
-    new_xy = [[p.x, p.y] for p in path.poses][1:]
-    runs[name] = (Track(np.vstack([old.trail(CLOSE_AT), new_xy]), SPEED), dt)
-    print(f"{name}: planned {old.length:.2f} m, replanned in {dt * 1000:.0f} ms, drove {runs[name][0].length:.2f} m")
+    else:
+        print(f"{name}: planned {old.length:.2f} m, replanned in {dt * 1000:.0f} ms, drove {tr.length:.2f} m")
+
+world = load_world()
 
 fig, ax = plt.subplots(figsize=(6.4, 5.4))
 fig.subplots_adjust(left=0.01, right=0.99, bottom=0.01, top=0.93)
@@ -71,7 +52,7 @@ for g in getattr(hall.closed_polygon, "geoms", [hall.closed_polygon]):
 door_text = ax.text(2.55, 1.3, "closed", color="white", fontsize=9, ha="center", rotation=90, zorder=6, visible=False)
 
 artists = []
-for i, (name, (tr, dt)) in enumerate(runs.items()):
+for i, (name, (_, tr, dt)) in enumerate(runs.items()):
     color = COLORS[name]
     a = {
         "plan": ax.plot([], [], color=color, lw=1, alpha=0.35, zorder=4)[0],
@@ -94,7 +75,7 @@ for i, (name, (tr, dt)) in enumerate(runs.items()):
     }
     artists.append((name, tr, dt, a))
 
-n_frames = int((max(tr.duration for tr, _ in runs.values()) + HOLD_S) * FPS)
+n_frames = int((max(tr.duration for _, tr, _ in runs.values()) + HOLD_S) * FPS)
 
 
 def update(i):
