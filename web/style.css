@@ -1,5 +1,6 @@
 /* Blueprint sheet: one blue, white ink, two pen colours for the robots. */
 :root {
+  color-scheme: dark;
   --sheet: #21497a;
   --sheet-dark: #1b3e69;
   --ink: #f3f6fa;
