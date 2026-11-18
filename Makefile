@@ -1,6 +1,6 @@
 PY = .venv/bin/python
 
-.PHONY: ui gif door video smoke test bench
+.PHONY: ui gif door video smoke test bench web serve
 
 ui:
 	$(PY) ui.py
@@ -23,3 +23,9 @@ smoke:
 
 test:
 	$(PY) -m pytest -q tests
+
+web:
+	$(PY) export.py
+
+serve:
+	$(PY) -m http.server -d web 8000
