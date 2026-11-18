@@ -7,7 +7,8 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation, PillowWriter
+from matplotlib.animation import FFMpegWriter, FuncAnimation, PillowWriter
+from matplotlib.collections import LineCollection
 
 from navbench.motion import Track
 from navbench.world import GOAL, START, draw_world, load_world, make_planners, plan
@@ -19,14 +20,19 @@ COLORS = {"A*": "tab:blue", "RRT*": "tab:red"}
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--seed", type=int, default=0)
+parser.add_argument("--mp4", action="store_true", help="write demos/race.mp4 instead (needs ffmpeg)")
 args = parser.parse_args()
 
 world = load_world()
 robot = world.robots[0]
 
 tracks = {}
+tree = []
 for name, planner in make_planners().items():
     path, dt = plan(robot, planner, args.seed)
+    if name == "RRT*":
+        for g in planner.get_graphs():
+            tree += [[(e.nodeA.pose.x, e.nodeA.pose.y), (e.nodeB.pose.x, e.nodeB.pose.y)] for e in g.edges]
     assert path is not None and path.poses, f"{name}: no path"
     tracks[name] = Track.from_path(path, SPEED)
     print(f"{name}: length={path.length:.2f} m, plan={dt:.3f} s, travel={tracks[name].duration:.1f} s")
@@ -34,6 +40,7 @@ for name, planner in make_planners().items():
 fig, ax = plt.subplots(figsize=(6.4, 5.4))
 fig.subplots_adjust(left=0.01, right=0.99, bottom=0.01, top=0.93)
 draw_world(ax, world)
+ax.add_collection(LineCollection(tree, colors="tab:red", linewidths=0.5, alpha=0.25, zorder=3))
 
 ax.plot(START.x, START.y, "go", ms=10, zorder=3)
 ax.plot(GOAL.x, GOAL.y, "k*", ms=16, zorder=3)
@@ -42,7 +49,7 @@ ax.set_xlim(-3.3, 3.8)
 ax.set_ylim(-1.3, 4.3)
 ax.set_xticks([])
 ax.set_yticks([])
-ax.set_title("A* vs RRT*: same start, same goal", fontsize=12)
+ax.set_title("A* vs RRT*: same start, same goal (faint lines: RRT* search tree)", fontsize=11)
 
 lines, dots, labels = [], [], []
 for i, name in enumerate(tracks):
@@ -79,6 +86,10 @@ def update(i):
 
 
 anim = FuncAnimation(fig, update, frames=n_frames, interval=1000 / FPS, blit=True)
-out = Path(__file__).parent / "demos" / "race.gif"
-anim.save(out, writer=PillowWriter(fps=FPS), dpi=80)
+if args.mp4:
+    out = Path(__file__).parent / "demos" / "race.mp4"
+    anim.save(out, writer=FFMpegWriter(fps=FPS), dpi=120)
+else:
+    out = Path(__file__).parent / "demos" / "race.gif"
+    anim.save(out, writer=PillowWriter(fps=FPS), dpi=80)
 print("saved", out, f"({out.stat().st_size / 1e6:.1f} MB, {n_frames} frames)")
