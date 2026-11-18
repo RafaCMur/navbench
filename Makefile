@@ -1,6 +1,6 @@
 PY = .venv/bin/python
 
-.PHONY: ui gif smoke test bench
+.PHONY: ui gif door smoke test bench
 
 ui:
 	$(PY) ui.py
@@ -10,6 +10,9 @@ bench:
 
 gif:
 	$(PY) animate.py
+
+door:
+	$(PY) door.py
 
 smoke:
 	$(PY) demo.py
