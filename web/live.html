@@ -68,9 +68,11 @@
 
   <section class="text">
     <h2>How the live mode works</h2>
-    <p>PyRoboSim is Python, so it cannot run on this page. Instead, <code>planners.js</code> is A* and RRT* written again in JavaScript, following the PyRoboSim code step by step and with the same settings. The map is the free space from PyRoboSim, saved by <code>make web</code>: where the centre of the robot may be, already shrunk by 15 cm for A* and by the robot radius for RRT*.</p>
-    <p>A* builds the same 5 cm grid as PyRoboSim, cell for cell, and returns the same route on all four benchmark routes. RRT* uses the same random number generator as NumPy, so a seed gives the same random points as in Python. For more than half of the benchmark runs it also returns exactly the same route. In the other runs a sine or cosine comes out different in the last digit, an edge that is exactly 50 cm long ends up just over the limit on one side and just under it on the other, and from there the two trees grow apart. Over 30 seeds the lengths come out about the same.</p>
-    <p>The times are measured in your browser, so they are not comparable with the Python times in the replay.</p>
+    <p>A web page cannot run Python, and PyRoboSim is Python. So I wrote A* and RRT* again in JavaScript, which every browser can run. The code is in <code>planners.js</code>. It copies PyRoboSim's code step by step and uses the same settings.</p>
+    <p>The planners also need a map. The robot is not a point. It has a size, so its centre cannot go right up to a wall. PyRoboSim works out where the centre can safely be, and I saved that area from Python. A* keeps 15 cm away from walls and furniture. RRT* keeps 10 cm, which is the radius of the robot.</p>
+    <p>A* puts a grid of 5 cm squares over the house and searches it square by square. My grid has the same squares as PyRoboSim's, and A* finds the same route as PyRoboSim on all four benchmark routes.</p>
+    <p>RRT* picks random points, so it needs random numbers. A seed is a number that fixes those choices: the same seed gives the same points. I used the same random number generator as NumPy, the Python library PyRoboSim uses. In 71 of the 120 benchmark runs (four routes, 30 seeds each) the route is identical to the Python one. In the others it starts out the same and then splits off. The reason is tiny. JavaScript and Python sometimes disagree about a sine or cosine in the last digit. RRT* only links two points that are at most 50 cm apart, and a step of exactly 50 cm can come out a hair under the limit in Python and a hair over it in JavaScript. One point is kept in one language and dropped in the other, and from then on the two trees grow differently. Over 30 seeds the routes have about the same length.</p>
+    <p>The times on this page are measured in your browser. They cannot be compared with the times in Replay, which were measured in Python on my laptop.</p>
   </section>
 </main>
 
