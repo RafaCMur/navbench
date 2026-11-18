@@ -9,7 +9,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.animation import FuncAnimation, PillowWriter
+from matplotlib.animation import FFMpegWriter, FuncAnimation, PillowWriter
 from pyrobosim.utils.pose import Pose
 from shapely.geometry import LineString
 
@@ -25,6 +25,7 @@ COLORS = {"A*": "tab:blue", "RRT*": "tab:red"}
 parser = argparse.ArgumentParser()
 # with seed 8 the first RRT* route also uses the short hallway, so both robots have to replan
 parser.add_argument("--seed", type=int, default=8)
+parser.add_argument("--mp4", action="store_true", help="write demos/door.mp4 instead (needs ffmpeg)")
 args = parser.parse_args()
 
 world = load_world()
@@ -120,6 +121,10 @@ def update(i):
 
 
 anim = FuncAnimation(fig, update, frames=n_frames, interval=1000 / FPS, blit=True)
-out = Path(__file__).parent / "demos" / "door.gif"
-anim.save(out, writer=PillowWriter(fps=FPS), dpi=80)
+if args.mp4:
+    out = Path(__file__).parent / "demos" / "door.mp4"
+    anim.save(out, writer=FFMpegWriter(fps=FPS), dpi=120)
+else:
+    out = Path(__file__).parent / "demos" / "door.gif"
+    anim.save(out, writer=PillowWriter(fps=FPS), dpi=80)
 print("saved", out, f"({out.stat().st_size / 1e6:.1f} MB, {n_frames} frames)")
