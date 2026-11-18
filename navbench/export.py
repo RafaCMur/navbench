@@ -1,5 +1,6 @@
 import numpy as np
 from pyrobosim.utils.pose import Pose
+from shapely.geometry import LineString
 
 from navbench.bench import SCENARIOS
 from navbench.scenes import CLOSE_AT, door_run
@@ -43,6 +44,7 @@ def build(seeds):
         if closed:
             close_door(world)
         robot = world.robots[0]
+        hall = door(world).closed_polygon
         s, g = Pose(x=start[0], y=start[1]), Pose(x=goal[0], y=goal[1])
         runs = {}
         for planner_name in make_planners():
@@ -55,7 +57,8 @@ def build(seeds):
                     {
                         "seed": seed,
                         "ok": ok,
-                        "length": round(path.length, 3) if ok else None,
+                        "length": round(path.length, 4) if ok else None,
+                        "via_door": ok and bool(LineString([(p.x, p.y) for p in path.poses]).intersects(hall)),
                         "time": round(dt, 4),
                         "path": pts([(p.x, p.y) for p in path.poses]) if ok else [],
                         "tree": tree_edges(planner),

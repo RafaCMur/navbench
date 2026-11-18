@@ -17,5 +17,6 @@ def test_build():
             for r in runs:
                 assert r["ok"] and r["length"] > 0 and len(r["path"]) > 1
                 assert bool(r["tree"]) == (name == "RRT*")
+                assert isinstance(r["via_door"], bool)
     for runs in data["door"].values():
         assert all(r["arrived"] for r in runs)

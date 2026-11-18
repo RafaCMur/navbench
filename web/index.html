@@ -59,9 +59,45 @@
       </div>
     </aside>
   </section>
+
+  <section class="how">
+    <div class="card">
+      <h3><span class="chip" style="background:var(--astar)"></span>A*</h3>
+      <p>Cuts the house into a grid of 5 cm cells, marks the cells a robot cannot stand in, then searches outward from the start, always trying the most promising cell first. It finds the shortest route on that grid, and the same route every time.</p>
+    </div>
+    <div class="card">
+      <h3><span class="chip" style="background:var(--rrt)"></span>RRT*</h3>
+      <p>Throws random points into free space and grows two trees, one from the start and one from the goal, toward them. It rewires nearby branches when a shorter link appears. It stops as soon as the trees meet, so the route depends on where the random points fell.</p>
+    </div>
+  </section>
+
+  <section class="text">
+    <h2>Results over <span class="n-seeds">30</span> seeds</h2>
+    <p>Every route was planned once per seed with each planner. Click a row to watch it above. Each dot is one RRT* run; the blue line is A*, which is the same in every run.</p>
+    <table class="results">
+      <thead>
+        <tr><th>route</th><th>A* (m)</th><th>RRT* mean (m)</th><th>RRT* best / worst (m)</th><th>all runs</th><th>median time A* / RRT* (ms)</th></tr>
+      </thead>
+      <tbody id="results"></tbody>
+    </table>
+    <p id="door-summary"></p>
+
+    <h2>What I found</h2>
+    <p>A* found the shorter path on average on every route, and it found the same path every time. RRT* was less predictable. From the kitchen to the bedroom it took the short hallway in only <b id="f-short"></b> of <span class="n-seeds">30</span> runs and drove around through the bathroom in the rest. That hallway is narrow and has a bend, so random points rarely land inside it before the trees meet another way.</p>
+    <p>A* is not always shortest. From the bathroom to the bedroom the best RRT* run (<b id="f-rrt-best"></b> m) beat A* (<b id="f-astar-bb"></b> m), because A* can only step between neighbouring grid cells while RRT* can connect points at any angle.</p>
+    <p>RRT* was usually faster here, but that is mostly the grid. Most of A*'s time goes into building the grid, not into the search. In a small house that is cheap. In a large map, or one that changes often, the grid has to be rebuilt every time and that cost grows.</p>
+
+    <h2>Limits</h2>
+    <p>This is one small 2D world with a round robot that drives along the path at constant speed. The robots do not sense anything. When the hallway closes they are told about it and plan again from scratch. The RRT* in PyRoboSim stops as soon as its trees connect, so it does not keep improving its path with extra time the way RRT* can. Times were measured on one laptop and change from machine to machine; path lengths do not.</p>
+  </section>
 </main>
+
+<footer>
+  <p>The world, the robot and both planners come from <a href="https://github.com/sea-bass/pyrobosim">PyRoboSim</a> by Sebastian Castro (MIT license). The paths on this page were planned by PyRoboSim in Python and saved on <span id="made"></span>; the page only replays them.</p>
+</footer>
 
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script src="results.js"></script>
 </body>
 </html>
