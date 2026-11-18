@@ -75,11 +75,13 @@
   <section class="how">
     <div>
       <h2><span class="swatch astar"></span>A*</h2>
-      <p>Overlays a grid of 5 cm cells on the house and marks the cells the robot does not fit in. It then searches outward from the start, always expanding the most promising cell first. It returns the shortest route on that grid, and the same route every time.</p>
+      <p>Drafts a grid of 5 cm cells on the house and marks the cells the robot does not fit in. It then searches outward from the start, always expanding the most promising cell first. It returns the shortest route on that grid, and the same route every time.</p>
+      <p>The cost grows with the number of cells, so with the size of the house and the cell size. It is cheap in a small map and about the same on every run: the median here is 58 to 89 ms, mostly spent building the grid.</p>
     </div>
     <div>
       <h2><span class="swatch rrt"></span>RRT*</h2>
       <p>Samples random points in the free space and grows two trees toward them, one from the start and one from the goal. When it finds a shorter connection between branches, it rewires the tree to use it. It stops when the two trees meet, so the route depends on where the random points fall.</p>
+      <p>The cost grows with the number of random points it needs, which depends on how hard the space is. It is cheap in open space and costly in narrow passages. It also varies a lot between runs, from 2 to 278 ms here.</p>
     </div>
   </section>
 
