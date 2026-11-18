@@ -1,6 +1,9 @@
 const D = window.DATA;
 const NAMES = ["A*", "RRT*"];
-const COLORS = { "A*": "#4ea1ff", "RRT*": "#ff5c6c" };
+const COLORS = { "A*": "#ffd447", "RRT*": "#ff8a7a" };
+const INK = "#f3f6fa";
+const SHEET = "#21497a";
+const FONT = "Barlow, 'Helvetica Neue', Arial, sans-serif";
 const SPEED = 1.0; // m/s, same as the Python scripts
 const HOLD = 1.0; // seconds to wait at the end before stopping
 const ROBOT_RADIUS = 0.1;
@@ -133,47 +136,75 @@ function line(pts, color, width, alpha = 1, dash = []) {
   ctx.restore();
 }
 
-function star(p, r, color) {
+function target(p, r) {
   const [cx, cy] = view.px(p);
+  ctx.strokeStyle = INK;
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
-  for (let i = 0; i < 10; i++) {
-    const a = -Math.PI / 2 + (i * Math.PI) / 5;
-    const rr = i % 2 ? r * 0.45 : r;
-    ctx.lineTo(cx + rr * Math.cos(a), cy + rr * Math.sin(a));
+  ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+  ctx.moveTo(cx - r - 4, cy);
+  ctx.lineTo(cx + r + 4, cy);
+  ctx.moveTo(cx, cy - r - 4);
+  ctx.lineTo(cx, cy + r + 4);
+  ctx.stroke();
+}
+
+function hatch(ring) {
+  ctx.save();
+  poly(ring, null, null);
+  ctx.clip();
+  ctx.strokeStyle = INK;
+  ctx.globalAlpha = 0.7;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  const w = canvas.clientWidth + canvas.clientHeight;
+  for (let k = -canvas.clientHeight; k < w; k += 7) {
+    ctx.moveTo(k, 0);
+    ctx.lineTo(k - canvas.clientHeight, canvas.clientHeight);
   }
-  ctx.closePath();
-  ctx.fillStyle = color;
-  ctx.fill();
+  ctx.stroke();
+  ctx.restore();
+  poly(ring, null, INK, 1.5);
+}
+
+function scaleBar() {
+  const x = 18;
+  const y = canvas.clientHeight - 22;
+  const m = view.s;
+  ctx.fillStyle = INK;
+  ctx.fillRect(x, y, m / 2, 5);
+  ctx.strokeStyle = INK;
+  ctx.lineWidth = 1;
+  ctx.strokeRect(x + 0.5, y + 0.5, m - 1, 5);
+  ctx.font = `13px ${FONT}`;
+  ctx.textAlign = "left";
+  ctx.fillText("0", x - 3, y - 6);
+  ctx.textAlign = "center";
+  ctx.fillText("1 m", x + m, y - 6);
 }
 
 function drawWorld() {
   const w = D.world;
-  w.halls.forEach((r) => poly(r, "#1a1f2b", "#2c3344"));
-  w.rooms.forEach((r) => poly(r, "#1d2230", "#3a4256", 1.5));
-  w.furniture.forEach((r) => poly(r, "#3a3226", "#5a4c37"));
-  ctx.fillStyle = "#4b5368";
-  ctx.font = "600 11px ui-sans-serif, system-ui, sans-serif";
+  w.halls.forEach((r) => poly(r, "#244f83", "rgba(243,246,250,0.75)", 1));
+  w.rooms.forEach((r) => poly(r, "#265387", INK, 2.5));
+  w.furniture.forEach((r) => poly(r, "rgba(243,246,250,0.08)", "rgba(243,246,250,0.8)", 1));
+  ctx.fillStyle = "#b8c8dc";
+  ctx.font = `italic ${Math.round(Math.min(15, Math.max(11, view.s * 0.15)))}px ${FONT}`;
   ctx.textAlign = "center";
   for (const n of w.names) {
     const [x, y] = view.px([n.at[0], n.at[1] + 0.35]);
-    ctx.fillText(n.name.toUpperCase(), x, y);
+    ctx.fillText(n.name[0].toUpperCase() + n.name.slice(1), x, y);
   }
 }
 
 function drawRobot(p, color) {
   const [x, y] = view.px(p);
   const r = Math.max(7, ROBOT_RADIUS * view.s);
-  ctx.save();
-  ctx.shadowColor = color;
-  ctx.shadowBlur = 16;
   ctx.beginPath();
   ctx.arc(x, y, r, 0, 2 * Math.PI);
   ctx.fillStyle = color;
   ctx.fill();
-  ctx.restore();
-  ctx.beginPath();
-  ctx.arc(x, y, r, 0, 2 * Math.PI);
-  ctx.strokeStyle = "#ffffff";
+  ctx.strokeStyle = SHEET;
   ctx.lineWidth = 2;
   ctx.stroke();
 }
@@ -183,60 +214,56 @@ function draw() {
   const sc = D.scenarios[state.scenario];
   ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
   drawWorld();
+  scaleBar();
   const t = state.t;
   const shut = sc.closed || (doorMode() && t >= D.close_at);
-  if (shut) D.world.door.forEach((r) => poly(r, "#3a151a", "#7a2a33"));
+  if (shut) {
+    D.world.door.forEach(hatch);
+    const ring = D.world.door[0];
+    const xs = ring.map((p) => p[0]);
+    const mid = (Math.min(...ring.map((p) => p[1])) + Math.max(...ring.map((p) => p[1]))) / 2;
+    ctx.fillStyle = INK;
+    ctx.font = `italic 15px ${FONT}`;
+    const [x, y] = view.px([Math.max(...xs), mid]);
+    ctx.textAlign = "left";
+    // on narrow screens there is no room for the label, the hatching has to do
+    if (x + 8 + ctx.measureText("Hallway").width < canvas.clientWidth - 4) {
+      ctx.fillText("Hallway", x + 8, y - 2);
+      ctx.fillText("closed", x + 8, y + 15);
+    }
+  }
 
   if (state.tree) {
-    for (const [a, b] of runs["RRT*"].tree) line([a, b], COLORS["RRT*"], 1, 0.22);
+    for (const [a, b] of runs["RRT*"].tree) line([a, b], COLORS["RRT*"], 1, 0.35);
   }
   if (state.all) {
     for (const name of NAMES) {
       const paths = doorMode() ? D.door[name].map((d) => d.driven) : sc.runs[name].filter((r) => r.ok).map((r) => r.path);
-      for (const p of paths) line(p, COLORS[name], 1.5, name === "A*" ? 0.5 : 0.14);
+      for (const p of paths) line(p, COLORS[name], 1.5, name === "A*" ? 0.6 : 0.2);
     }
   }
 
+  // planned route ahead is dashed, the part already driven is solid
   for (const name of NAMES) {
     const r = runs[name];
     if (doorMode() && t < D.close_at) {
-      line(r.first.ahead(t), COLORS[name], 1.5, 0.35);
+      line(r.first.ahead(t), COLORS[name], 1.5, 0.9, [6, 5]);
       continue;
     }
-    if (doorMode() && r.replan !== null) line(r.first.ahead(D.close_at), COLORS[name], 1.5, 0.35, [4, 5]);
-    line(r.track.ahead(t), COLORS[name], 1.5, 0.35);
+    if (doorMode() && r.replan !== null) line(r.first.ahead(D.close_at), COLORS[name], 1.5, 0.45, [1, 5]);
+    line(r.track.ahead(t), COLORS[name], 1.5, 0.9, [6, 5]);
   }
-  for (const name of NAMES) {
-    const tr = runs[name].track;
-    ctx.save();
-    ctx.shadowColor = COLORS[name];
-    ctx.shadowBlur = 8;
-    line(tr.trail(t), COLORS[name], 3);
-    ctx.restore();
-  }
+  for (const name of NAMES) line(runs[name].track.trail(t), COLORS[name], 3);
 
   const [sx, sy] = view.px(sc.start);
   ctx.beginPath();
   ctx.arc(sx, sy, 5, 0, 2 * Math.PI);
-  ctx.fillStyle = "#3ddc97";
-  ctx.fill();
-  star(sc.goal, 11, "#ffd166");
+  ctx.strokeStyle = INK;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  target(sc.goal, 8);
 
-  for (const name of NAMES) drawRobot(runs[name].track.position(t), COLORS[name]);
-
-  if (doorMode() && t >= D.close_at && t < D.close_at + 2.5) {
-    const ring = D.world.door[0];
-    const cx = ring.reduce((a, p) => a + p[0], 0) / ring.length;
-    const cy = ring.reduce((a, p) => a + p[1], 0) / ring.length;
-    const [x, y] = view.px([cx, cy]);
-    ctx.save();
-    ctx.globalAlpha = Math.min(1, 2.5 + D.close_at - t);
-    ctx.fillStyle = "#ff5c6c";
-    ctx.font = "700 13px ui-sans-serif, system-ui, sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText("DOOR CLOSED", x, y);
-    ctx.restore();
-  }
+  for (const name of [...NAMES].reverse()) drawRobot(runs[name].track.position(t), COLORS[name]);
 }
 
 const robotsEl = document.getElementById("robots");
@@ -245,18 +272,13 @@ const scrub = document.getElementById("scrub");
 const cards = {};
 for (const name of NAMES) {
   const el = document.createElement("div");
-  el.className = "robot";
+  el.className = "row";
   el.innerHTML = `
-    <div class="top"><span class="chip" style="background:${COLORS[name]}"></span>${name}<span class="status"></span></div>
-    <div class="bar"><div class="fill" style="background:${COLORS[name]}"></div></div>
-    <div class="nums"><span class="dist"></span><span class="plan"></span></div>`;
+    <div class="name"><span class="pen" style="border-color:${COLORS[name]}"></span>${name}</div>
+    <div class="nums"></div>
+    <div class="status"></div>`;
   robotsEl.appendChild(el);
-  cards[name] = {
-    status: el.querySelector(".status"),
-    fill: el.querySelector(".fill"),
-    dist: el.querySelector(".dist"),
-    plan: el.querySelector(".plan"),
-  };
+  cards[name] = { nums: el.querySelector(".nums"), status: el.querySelector(".status") };
 }
 
 function updatePanel() {
@@ -265,20 +287,16 @@ function updatePanel() {
     const r = runs[name];
     const c = cards[name];
     const tr = r.track;
-    c.dist.textContent = `${tr.dist(t).toFixed(1)} / ${tr.length.toFixed(1)} m`;
-    c.plan.textContent = `planned in ${Math.round(r.plan * 1000)} ms`;
-    c.fill.style.width = `${tr.length ? (100 * tr.dist(t)) / tr.length : 0}%`;
-    if (doorMode() && t < D.close_at) {
-      c.dist.textContent = `${tr.dist(t).toFixed(1)} / ${r.first.length.toFixed(1)} m`;
-      c.fill.style.width = `${(100 * tr.dist(t)) / r.first.length}%`;
+    const total = doorMode() && t < D.close_at ? r.first.length : tr.length;
+    c.nums.textContent = `${tr.dist(t).toFixed(1)} of ${total.toFixed(1)} m`;
+
+    let status = `planned in ${Math.round(r.plan * 1000)} ms`;
+    if (doorMode() && t >= D.close_at) {
+      status = r.replan === null ? "not blocked, kept its route" : `replanned in ${Math.round(r.replan * 1000)} ms`;
     }
-    let status = "ready";
-    if (t >= tr.duration) status = r.ok ? `arrived at ${tr.duration.toFixed(1)} s` : "stuck, no path";
-    else if (doorMode() && t >= D.close_at) status = r.replan === null ? "not blocked" : `replanned in ${Math.round(r.replan * 1000)} ms`;
-    else if (t > 0) status = "driving";
-    if (!r.ok && !doorMode()) status = "no path";
+    if (!r.ok && !doorMode()) status = "found no path";
+    else if (t >= tr.duration) status += r.ok ? `, arrived at ${tr.duration.toFixed(1)} s` : ", stuck";
     c.status.textContent = status;
-    c.status.classList.toggle("done", r.ok && t >= tr.duration);
   }
 
   const [a, b] = NAMES.map((n) => runs[n]);
@@ -287,10 +305,12 @@ function updatePanel() {
   if (done && a.ok && b.ok) {
     const gap = b.track.duration - a.track.duration;
     if (Math.abs(gap) < 0.05) msg = "A tie.";
-    else msg = `${gap > 0 ? "A*" : "RRT*"} arrives ${Math.abs(gap).toFixed(1)} s earlier.`;
+    else msg = `${gap > 0 ? "A*" : "RRT*"} got there ${Math.abs(gap).toFixed(1)} s earlier.`;
   }
   resultEl.textContent = msg;
   scrub.value = Math.round((1000 * state.t) / endTime());
+  document.getElementById("tb-route").textContent = D.scenarios[state.scenario].name + (doorMode() ? ", hallway closes" : "");
+  document.getElementById("tb-seed").textContent = state.seed;
 }
 
 const playBtn = document.getElementById("play");
@@ -431,5 +451,6 @@ runs = runsNow();
 state.t = Math.min(state.t, endTime());
 syncDoorBox();
 new ResizeObserver(resize).observe(canvas);
+document.fonts.ready.then(draw);
 updatePanel();
 requestAnimationFrame(frame);

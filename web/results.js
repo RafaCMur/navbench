@@ -35,7 +35,7 @@ function strip(a, r, lo, hi) {
     .map((v, i) => `<circle cx="${x(v).toFixed(1)}" cy="${(8 + (i % 3) * 5).toFixed(1)}" r="2.6" fill="var(--rrt)" opacity="0.75"/>`)
     .join("");
   const ax = x(a.mean).toFixed(1);
-  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><line x1="6" x2="${w - 6}" y1="${h - 3}" y2="${h - 3}" stroke="#2c3344"/>${dots}<line x1="${ax}" x2="${ax}" y1="2" y2="${h - 2}" stroke="var(--astar)" stroke-width="2"/></svg>`;
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><line x1="6" x2="${w - 6}" y1="${h - 3}" y2="${h - 3}" stroke="var(--rule)"/>${dots}<line x1="${ax}" x2="${ax}" y1="2" y2="${h - 2}" stroke="var(--astar)" stroke-width="2"/></svg>`;
 }
 
 const tbody = document.getElementById("results");
