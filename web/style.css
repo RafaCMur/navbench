@@ -151,3 +151,8 @@ a.mode:focus-visible { outline: 2px solid var(--astar); outline-offset: 5px; }
 @media (max-width: 880px) {
   .modes { grid-template-columns: 1fr; }
 }
+
+.places { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 2px; }
+.places button { text-align: left; }
+#hall, #again { width: 100%; text-align: left; }
+code { font-family: inherit; font-weight: 600; }

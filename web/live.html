@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Two robots, one house: live</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <p class="back"><a href="index.html">Back to start</a></p>
+  <h1>Two robots, one house</h1>
+  <p>Send both robots somewhere. They plan the route right here in your browser, and you can close the short hallway while they drive.</p>
+</header>
+
+<main>
+  <section class="sheet">
+    <canvas id="map"></canvas>
+
+    <aside class="side">
+      <div class="legend" id="robots"></div>
+      <p class="result" id="result"></p>
+
+      <div class="controls">
+        <div class="field">
+          Drive to
+          <div class="places" id="places"></div>
+        </div>
+
+        <div class="buttons">
+          <button id="play" class="primary">Pause</button>
+          <button id="reset">Reset</button>
+          <span class="speeds">
+            <button data-speed="1" class="on">1×</button>
+            <button data-speed="2">2×</button>
+            <button data-speed="4">4×</button>
+          </span>
+        </div>
+
+        <button id="hall">Close the short hallway</button>
+
+        <div class="field">
+          <span>RRT* seed <b id="seed-value">0</b></span>
+          <button id="again">Drive this leg again with another seed</button>
+        </div>
+
+        <label class="check"><input id="search" type="checkbox"><span>Show the cells A* searched</span></label>
+        <label class="check"><input id="tree" type="checkbox"><span>Show the RRT* search tree</span></label>
+
+        <p class="keys" id="note">Space plays or pauses.</p>
+      </div>
+
+      <table class="titleblock">
+        <tr><td>Project</td><td>navbench</td></tr>
+        <tr><td>Mode</td><td>Live</td></tr>
+        <tr><td>Going to</td><td id="tb-goal">nowhere yet</td></tr>
+        <tr><td>Planned</td><td>in your browser</td></tr>
+        <tr><td>Drawn by</td><td>RafaCMur</td></tr>
+      </table>
+    </aside>
+  </section>
+
+  <section class="text">
+    <h2>How the live mode works</h2>
+    <p>PyRoboSim is Python, so it cannot run on this page. Instead, <code>planners.js</code> is A* and RRT* written again in JavaScript, following the PyRoboSim code step by step and with the same settings. The map is the free space from PyRoboSim, saved by <code>make web</code>: where the centre of the robot may be, already shrunk by 15 cm for A* and by the robot radius for RRT*.</p>
+    <p>A* builds the same 5 cm grid as PyRoboSim, cell for cell, and returns the same route on all four benchmark routes. RRT* uses the same random number generator as NumPy, so a seed gives the same random points as in Python. For more than half of the benchmark runs it also returns exactly the same route. In the other runs a sine or cosine comes out different in the last digit, an edge that is exactly 50 cm long ends up just over the limit on one side and just under it on the other, and from there the two trees grow apart. Over 30 seeds the lengths come out about the same.</p>
+    <p>The times are measured in your browser, so they are not comparable with the Python times in the replay.</p>
+  </section>
+</main>
+
+<footer>
+  <p>The world, the robot and both planners come from <a href="https://github.com/sea-bass/pyrobosim">PyRoboSim</a> by Sebastian Castro (MIT license). The JavaScript planners follow its code.</p>
+</footer>
+
+<script src="data.js"></script>
+<script src="draw.js"></script>
+<script src="planners.js"></script>
+<script src="live.js"></script>
+</body>
+</html>

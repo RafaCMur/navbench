@@ -4,7 +4,7 @@ from shapely.geometry import LineString
 
 from navbench.bench import SCENARIOS
 from navbench.scenes import CLOSE_AT, door_run
-from navbench.world import close_door, door, load_world, make_planners, plan
+from navbench.world import START, close_door, door, load_world, make_planners, plan
 
 
 def rings(geom):
@@ -34,10 +34,43 @@ def world_shapes(world):
     }
 
 
+def free_space(inflation, closed):
+    """Where the robot centre may be, as polygons with holes, at full precision."""
+    world = load_world()
+    if closed:
+        close_door(world)
+    world.set_inflation_radius(inflation)
+    geom = world.total_internal_polygon
+    # not rounded: the grid test points can sit exactly on an edge
+    exact = lambda coords: [[x, y] for x, y, *_ in coords]
+    return [[exact(g.exterior.coords)] + [exact(r.coords) for r in g.interiors] for g in getattr(geom, "geoms", [geom])]
+
+
+def live_map():
+    """Everything the in-browser planners need: free space, world bounds and places to drive to."""
+    world = load_world()
+    places = [{"name": room.name, "at": pts([(room.nav_poses[0].x, room.nav_poses[0].y)], 3)[0]} for room in world.rooms]
+    for loc in world.locations:
+        pose = loc.children[0].nav_poses[0]
+        places.append({"name": loc.category.replace("_", " "), "at": pts([(pose.x, pose.y)], 3)[0]})
+    radius = world.robots[0].radius
+    inflation = make_planners()["A*"].grid_inflation_radius
+    return {
+        "bounds": [world.x_bounds, world.y_bounds],
+        "radius": radius,
+        "home": [START.x, START.y],
+        "places": places,
+        "free": {
+            "A*": {"open": free_space(inflation, False), "closed": free_space(inflation, True)},
+            "RRT*": {"open": free_space(radius, False), "closed": free_space(radius, True)},
+        },
+    }
+
+
 def build(seeds):
     """Plan every scenario and the door scene for each seed. Returns plain data for the web viewer."""
     seeds = list(seeds)
-    data = {"seeds": seeds, "close_at": CLOSE_AT, "world": world_shapes(load_world()), "scenarios": []}
+    data = {"seeds": seeds, "close_at": CLOSE_AT, "world": world_shapes(load_world()), "live": live_map(), "scenarios": []}
 
     for name, (start, goal, closed) in SCENARIOS.items():
         world = load_world()
