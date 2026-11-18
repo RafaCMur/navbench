@@ -10,13 +10,15 @@ In the second scene the short hallway to the bedroom closes one second after the
 
 ## Web viewer
 
-`web/` is a static site. `index.html` is the start screen. It leads to two modes.
+`web/` is a static site. `index.html` is the start screen. It leads to three modes.
 
 `replay.html` replays the PyRoboSim runs: pick the route and the RRT* seed, close the short hallway after one second, show the RRT* search tree, or draw all 30 routes on top of each other. It also has the results table and the write-up. Open `web/index.html` directly, or run `make serve` and go to http://127.0.0.1:8000.
 
 `live.html` plans in the browser: send both robots to a room or a piece of furniture, and close the short hallway while they drive. `web/planners.js` is A* and RRT* written again in JavaScript, following the PyRoboSim code. A* gives the same route as PyRoboSim on every benchmark route. RRT* uses the same random generator as NumPy and gives the same route for more than half of the seeds; the rest drift apart because sine and cosine differ in the last digit between JavaScript and Python. `tests/test_live.py` checks this and needs Node.js.
 
-The replay page does not plan anything itself. `make web` runs PyRoboSim for every route and seed and saves the paths, trees and times to `web/data.js`, and the page replays them.
+`tidy.html` replays a small task, also run in PyRoboSim: each robot opens the trash can, fetches the soda from the desk and throws it away, using PyRoboSim's pick, place, open and close actions. `navbench/scenes.py` has the steps.
+
+The replay pages do not plan anything themselves. `make web` runs PyRoboSim for every route and seed and saves the paths, trees and times to `web/data.js`, and the page replays them.
 
 To put it online, deploy the `web` folder as a static site, for example on Vercel with `web` as the root directory, or on GitHub Pages.
 

@@ -132,7 +132,7 @@ footer p { border-top: 1px solid var(--rule); padding-top: 16px; max-width: 90ch
 
 .start header { padding-top: clamp(24px, 6vh, 64px); padding-bottom: 0; }
 .start header p { max-width: none; }
-.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: clamp(16px, 4vh, 32px) 6px 24px; }
+.modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; margin: clamp(16px, 4vh, 32px) 6px 24px; }
 .mode {
   display: block;
   color: var(--ink);
@@ -142,7 +142,7 @@ footer p { border-top: 1px solid var(--rule); padding-top: 16px; max-width: 90ch
   outline: 1px solid var(--rule);
   outline-offset: 5px;
 }
-.mode svg { display: block; width: 100%; height: clamp(110px, 32vh, 300px); margin-bottom: 12px; }
+.mode svg { display: block; width: 100%; height: clamp(100px, 30vh, 260px); margin-bottom: 12px; }
 .mode h2 { margin: 0 0 4px; }
 .mode p { margin: 0; color: var(--muted); }
 a.mode:hover { background: var(--sheet-dark); }
@@ -161,3 +161,23 @@ code { font-family: inherit; font-weight: 600; }
 
 .start { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
 .start header, .start main { width: 100%; }
+
+.steps { border-collapse: collapse; width: 100%; font-size: 0.88rem; border-top: 1px solid var(--ink); }
+.steps th { text-align: left; font-weight: 500; color: var(--muted); padding: 6px 8px 4px; }
+.steps td { padding: 3px 8px; border-top: 1px solid var(--rule); }
+.steps th:first-child, .steps td:first-child { padding-left: 16px; }
+.steps td:not(:first-child), .steps th:not(:first-child) { width: 52px; text-align: right; }
+.steps td.now { font-style: italic; color: var(--astar); }
+
+.tidy .sheet { grid-template-columns: 1fr; }
+.tidy #map { height: auto; min-height: 0; aspect-ratio: 14 / 6.4; }
+.tidy .side { border-left: 0; border-top: 1px solid var(--ink); display: grid; grid-template-columns: 1fr 1.2fr 1fr; }
+.tidy .side > * + * { border-left: 1px solid var(--ink); }
+.tidy .steps { border-top: 0; align-self: start; }
+.tidy .col { display: flex; flex-direction: column; }
+
+@media (max-width: 880px) {
+  .tidy #map { aspect-ratio: 7 / 11; }
+  .tidy .side { grid-template-columns: 1fr; }
+  .tidy .side > * + * { border-left: 0; border-top: 1px solid var(--ink); }
+}

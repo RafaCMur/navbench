@@ -3,7 +3,7 @@ from pyrobosim.utils.pose import Pose
 from shapely.geometry import LineString
 
 from navbench.bench import SCENARIOS
-from navbench.scenes import CLOSE_AT, door_run
+from navbench.scenes import CLOSE_AT, door_run, tidy_run, tidy_world
 from navbench.world import START, close_door, door, load_world, make_planners, plan
 
 
@@ -67,6 +67,28 @@ def live_map():
     }
 
 
+def tidy(seeds):
+    """The soda task. A* is planned once since its routes do not depend on the seed."""
+    world = tidy_world()
+    runs = {}
+    for name in make_planners():
+        runs[name] = []
+        for seed in seeds[:1] if name == "A*" else seeds:
+            _, steps = tidy_run(name, seed)
+            for step in steps:
+                if "path" in step:
+                    step["path"] = pts(step["path"])
+                    step["time"] = round(step["time"], 4)
+                if "ring" in step:
+                    step["ring"] = pts(step["ring"], 3)
+            runs[name].append({"seed": seed, "steps": steps})
+    return {
+        "objects": [{"name": o.name, "ring": pts(o.polygon.exterior.coords, 3)} for o in world.objects],
+        "trash": rings(world.get_entity_by_name("trash").polygon)[0],
+        "runs": runs,
+    }
+
+
 def build(seeds):
     """Plan every scenario and the door scene for each seed. Returns plain data for the web viewer."""
     seeds = list(seeds)
@@ -113,4 +135,5 @@ def build(seeds):
                 }
             )
     data["door"] = door_runs
+    data["tidy"] = tidy(seeds)
     return data

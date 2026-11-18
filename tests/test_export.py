@@ -20,3 +20,7 @@ def test_build():
                 assert isinstance(r["via_door"], bool)
     for runs in data["door"].values():
         assert all(r["arrived"] for r in runs)
+    assert {o["name"] for o in data["tidy"]["objects"]} >= {"soda"}
+    assert len(data["tidy"]["runs"]["A*"]) == 1
+    for run in data["tidy"]["runs"]["RRT*"]:
+        assert [s["do"] for s in run["steps"]][-2:] == ["place", "close"]

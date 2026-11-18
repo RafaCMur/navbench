@@ -61,6 +61,12 @@ function resize() {
   canvas.height = Math.round(h * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
+  view = fit(0, 0, w, h);
+  draw();
+}
+
+// scale and offset that fit the house into the box at (x, y) of size w by h
+function fit(x, y, w, h) {
   const all = [...D.world.rooms, ...D.world.halls].flat();
   const xs = all.map((p) => p[0]);
   const ys = all.map((p) => p[1]);
@@ -68,10 +74,9 @@ function resize() {
   const minx = Math.min(...xs) - pad, maxx = Math.max(...xs) + pad;
   const miny = Math.min(...ys) - pad, maxy = Math.max(...ys) + pad;
   const s = Math.min(w / (maxx - minx), h / (maxy - miny));
-  const ox = (w - s * (maxx - minx)) / 2;
-  const oy = (h - s * (maxy - miny)) / 2;
-  view = { s, px: (p) => [ox + (p[0] - minx) * s, oy + (maxy - p[1]) * s] };
-  draw();
+  const ox = x + (w - s * (maxx - minx)) / 2;
+  const oy = y + (h - s * (maxy - miny)) / 2;
+  return { s, px: (p) => [ox + (p[0] - minx) * s, oy + (maxy - p[1]) * s] };
 }
 
 function poly(ring, fill, stroke, width = 1) {
