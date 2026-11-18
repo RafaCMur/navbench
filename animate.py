@@ -1,5 +1,6 @@
 """Two robots, same start and goal: A* vs RRT*. Exports demos/race.gif."""
 
+import argparse
 from pathlib import Path
 
 import matplotlib
@@ -9,43 +10,24 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.animation import FuncAnimation, PillowWriter
 
-from pyrobosim.core import WorldYamlLoader
-from pyrobosim.navigation import AStarPlanner, RRTPlanner
-from pyrobosim.utils.general import get_data_folder
-from pyrobosim.utils.pose import Pose
+from navbench.world import GOAL, START, draw_world, load_world, make_planners, plan
 
-START = Pose(x=0.0, y=0.0)
-GOAL = Pose(x=2.3, y=3.3)
 SPEED = 1.0  # m/s, same for both robots
 FPS = 20
 HOLD_S = 1.5  # seconds to keep the final frame
+COLORS = {"A*": "tab:blue", "RRT*": "tab:red"}
 
-world = WorldYamlLoader().from_file(get_data_folder() / "test_world.yaml")
+parser = argparse.ArgumentParser()
+parser.add_argument("--seed", type=int, default=0)
+args = parser.parse_args()
+
+world = load_world()
 robot = world.robots[0]
-
-planners = {
-    "A*": (AStarPlanner(grid_resolution=0.05, grid_inflation_radius=0.15), "tab:blue"),
-    "RRT*": (
-        RRTPlanner(
-            bidirectional=True,
-            rrt_star=True,
-            max_connection_dist=0.5,
-            rewire_radius=1.5,
-            collision_check_step_dist=0.025,
-        ),
-        "tab:red",
-    ),
-}
 
 
 class Run:
     def __init__(self, name, planner, color):
-        import time
-
-        robot.set_path_planner(planner)
-        t0 = time.perf_counter()
-        path = robot.plan_path(START, GOAL)
-        self.plan_time = time.perf_counter() - t0
+        path, self.plan_time = plan(robot, planner, args.seed)
         assert path is not None and path.poses, f"{name}: no path"
         self.name, self.color = name, color
         self.xy = np.array([[p.x, p.y] for p in path.poses])
@@ -67,21 +49,12 @@ class Run:
         return pts[:, 0], pts[:, 1]
 
 
-runs = [Run(n, p, c) for n, (p, c) in planners.items()]
+runs = [Run(n, p, COLORS[n]) for n, p in make_planners().items()]
 for r in runs:
     print(f"{r.name}: length={r.length:.2f} m, plan={r.plan_time:.3f} s, travel={r.travel_time:.1f} s")
 
 fig, ax = plt.subplots(figsize=(6, 6.4))
-for room in world.rooms:
-    x, y = room.polygon.exterior.xy
-    ax.fill(x, y, color="#f2f2f2", ec="black", zorder=1)
-for hall in world.hallways:
-    for g in getattr(hall.polygon, "geoms", [hall.polygon]):
-        x, y = g.exterior.xy
-        ax.fill(x, y, color="#e0e0e0", ec="gray", zorder=1)
-for loc in world.locations:
-    x, y = loc.polygon.exterior.xy
-    ax.fill(x, y, color="#c8b79a", ec="#8a7a5c", zorder=2)
+draw_world(ax, world)
 
 ax.plot(START.x, START.y, "go", ms=10, zorder=3)
 ax.plot(GOAL.x, GOAL.y, "k*", ms=16, zorder=3)
